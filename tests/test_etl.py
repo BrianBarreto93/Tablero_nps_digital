@@ -160,8 +160,8 @@ def test_cuadra_con_power_bi_al_10_nov():
     conn = _oracle()
     d = pd.concat([limpiar_estudio(k, extraer.encuestas(conn, k)) for k in ("app", "ecom", "bot")], ignore_index=True)
     conn.close()
-    d = d[d.fecha < "2026-11-11"]
-    if not len(d) or d.periodo.min() != "202611":
+    d = d[(d.fecha >= "2026-11-01") & (d.fecha < "2026-11-11")]
+    if not len(d):
         pytest.skip("Oracle ya no trae noviembre")
     d["corte"] = d.canal.where(d.clave == "app", d.estudio)
     for corte, (nps, n, nsu, ces, fcr) in PBI_NOV10.items():

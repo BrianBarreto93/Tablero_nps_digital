@@ -4,6 +4,9 @@ import os
 import oracledb
 import pandas as pd
 
+# Los CLOB (comentarios largos) llegan como texto: un LOB perezoso falla cuando la conexión ya se cerró
+oracledb.defaults.fetch_lobs = False
+
 from etl.config import ESQUEMA, ESTUDIOS, RAIZ, columnas
 
 

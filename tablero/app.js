@@ -348,8 +348,10 @@ function dibujarLineas(raiz) {
     for (let i = 1; i < fin.length; i++) if (fin[i].y - fin[i - 1].y < 13) fin[i].y = fin[i - 1].y + 13;
     S.forEach(({e, pts, total}, si) => {
       const c = CE[e], pos = pts.map(p => [X(xs.indexOf(p.x)), Y(p.r.v), p]);
-      const d = pos.map((q, j) => (j ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' ');
-      if (pos.length > 1 && !total) s += `<path d="${d} L${pos[pos.length - 1][0].toFixed(1)} ${base} L${pos[0][0].toFixed(1)} ${base} Z" class="l-ap" style="fill:url(#${id}-a${si});animation-delay:${.55 + si * .1}s"/>`;
+      // La línea se corta donde el estudio no tiene datos (p. ej., Claro Bot sin meses en Oracle): no se inventa el tramo
+      const segs = []; pos.forEach((q, j) => { if (!j || xs.indexOf(q[2].x) - xs.indexOf(pos[j - 1][2].x) > 1) segs.push([]); segs[segs.length - 1].push(q); });
+      const tramo = sg => sg.map((q, j) => (j ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' '), d = segs.map(tramo).join(' ');
+      if (!total) segs.filter(sg => sg.length > 1).forEach(sg => { s += `<path d="${tramo(sg)} L${sg[sg.length - 1][0].toFixed(1)} ${base} L${sg[0][0].toFixed(1)} ${base} Z" class="l-ap" style="fill:url(#${id}-a${si});animation-delay:${.55 + si * .1}s"/>`; });
       s += `<path d="${d}" pathLength="1" fill="none" stroke="${c}" stroke-width="${total ? 2.8 : 2}"${total ? ' stroke-dasharray="0"' : ''} stroke-linejoin="round" stroke-linecap="round" data-an="traza" data-i="${si * 2}"/>`;
       s += pos.map(([x, y, p], j) => `<circle class="g-pt l-pop" data-x="${p.x}" cx="${x}" cy="${y}" r="${total ? 4.2 : 3.6}" fill="${p.r.n < NMIN ? 'var(--panel)' : c}" stroke="${p.r.n < NMIN ? c : 'var(--panel)'}" stroke-width="2" style="animation-delay:${(.15 + si * .1 + 1.1 * j / Math.max(1, pos.length - 1)).toFixed(2)}s"/>`).join('');
     });
@@ -543,7 +545,9 @@ function hallazgos() {
   const ant = mesesAnteriores();
   if (ant) {
     const r0 = IND.nps.calc(A({periodo: ant}));
-    if (r0) { const d = T.v - r0.v; out.push({tono: d >= 0 ? 'bien' : 'alerta', cifra: fpp(d), u: 'pts', tab: 'resumen', t: `${alcance()} ${d >= 0 ? 'sube' : 'baja'} frente a ${etqCorta(ant)}`, p: `${f1(r0.v)} → ${f1(T.v)}. Revise en la matriz qué estudio y canal explica el cambio.`}); }
+    // Si el periodo anterior no tiene algún estudio (Oracle sin esos meses), la comparación del total no es pareja: se avisa
+    const sin = ests().filter(e => A({estudio: e}).n && !A({periodo: ant, estudio: e}).n).map(e => CORTO[EST[e]]);
+    if (r0) { const d = T.v - r0.v; out.push({tono: d >= 0 ? 'bien' : 'alerta', cifra: fpp(d), u: 'pts', tab: 'resumen', t: `${alcance()} ${d >= 0 ? 'sube' : 'baja'} frente a ${etqCorta(ant)}`, p: `${f1(r0.v)} → ${f1(T.v)}. ${sin.length ? `Ojo: ${etqCorta(ant)} no tiene encuestas de ${sin.join(' ni ')}, así que la comparación no es pareja. ` : ''}Revise en la matriz qué estudio y canal explica el cambio.`}); }
   }
   return out;
 }

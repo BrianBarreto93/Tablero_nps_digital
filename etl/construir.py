@@ -60,7 +60,8 @@ def procesar(periodos_pedidos=None):
     salidas, errores = {}, []
     for p in periodos:
         prev = DIR_PERIODOS / f"{_anterior(p)}.json"
-        n_ant = json.loads(prev.read_text())["n_estudio"] if prev.exists() else {}
+        # el mes anterior puede venir en esta misma corrida (aún sin escribir a disco)
+        n_ant = salidas[_anterior(p)]["n_estudio"] if _anterior(p) in salidas else json.loads(prev.read_text())["n_estudio"] if prev.exists() else {}
         chk, subs, vb, bf, escaneo, conteo, n_est = [], [], [], [], [], {}, {}
         for k in ORDEN_ESTUDIOS:
             sel = ds[k].periodo == p

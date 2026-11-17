@@ -1,5 +1,14 @@
 # Cambios
 
+## 2026-11-17 · v1.2
+
+- Histórico mayo–noviembre 2026 desde Oracle (496.157 encuestas). Claro Bot sin julio–octubre en `TBL_DIGITAL_TOUCHPOINT`.
+- Los CLOB se leen como texto (`oracledb.defaults.fetch_lobs = False`): con varios meses la lectura perezosa fallaba al
+  cerrar la conexión.
+- El aviso de volumen ±40 % compara contra el mes anterior aunque venga en la misma corrida.
+- Las líneas y sparks se cortan donde un estudio no tiene datos; el hallazgo de tendencia avisa si el mes anterior no tiene
+  todos los estudios.
+
 ## 2026-11-17 · v1.1
 
 - «Facilidad y recomendación», «¿Logró hacer la consulta?» y «¿Resolvió el requerimiento?»: las columnas con dos puntos

@@ -20,9 +20,10 @@ cd /opt/apps/claro_tablero_focos/claro_tablero_digital
 - Cada corrida reemplaza solo los meses que encuentra en Oracle. Si el proceso de origen recarga las tablas solo con el
   último corte, **la historia sigue en `data/periodos/`: no borrar esa carpeta**.
 - Un chequeo de calidad en **error** detiene la corrida sin escribir nada, y `etl.publicar` tampoco sube.
-- Al 2026-11-17 Oracle solo trae noviembre (1 al 17, cargado ese día a las 12:12). Cuando se carguen los meses anteriores
-  en las mismas tablas, basta con correr `etl.construir`: el tablero los toma solos (tendencia mes a mes, variaciones y
-  sparks aparecen cuando hay más de un mes).
+- Al 2026-11-17 Oracle trae **mayo a noviembre** (noviembre hasta el 17). **Claro Bot (`TBL_DIGITAL_TOUCHPOINT`) solo
+  tiene mayo, junio y noviembre**: de julio a octubre el NPS Digital va sin Claro Bot (el Power BI sí lo trae: ago 998,
+  sep 852, oct 1.028 encuestas), la línea de Claro Bot se corta en esos meses y el hallazgo de tendencia avisa que la
+  comparación no es pareja. Cuando se carguen, basta con correr `etl.construir`.
 
 ## Fuentes (Oracle `INVITADO_15`, solo lectura)
 
@@ -35,7 +36,13 @@ cd /opt/apps/claro_tablero_focos/claro_tablero_digital
 
 Todo lo que cambia de un corte a otro (columnas, catálogos, nombres de módulos, topes de comentarios) está en `etl/config.py`.
 
-### Cuadre con el Power BI (matriz «Detalle», noviembre con corte al 10-nov)
+### Cuadre con el Power BI
+
+Agosto a octubre (meses cerrados): Mi Claro (NPS 38,71 · 44,82 · 40,64; CES 70,97 · 74,49 · 72,46) y E-commerce
+(76,87 · 73,65 · 77,90) cuadran exacto con la matriz. WhatsApp trae ~2 % más encuestas (abajo) y Claro Bot no está en Oracle
+esos meses, por eso el total difiere (oct: Power BI 45,15 con 103.439 respuestas; tablero 45,10 con 102.931).
+
+#### Noviembre con corte al 10-nov
 
 `tests/test_etl.py::test_cuadra_con_power_bi_al_10_nov` lo comprueba mientras Oracle traiga noviembre:
 
