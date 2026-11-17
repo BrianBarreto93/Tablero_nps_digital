@@ -1,5 +1,11 @@
 # Cambios
 
+## 2026-11-17 · v1.1
+
+- «Facilidad y recomendación», «¿Logró hacer la consulta?» y «¿Resolvió el requerimiento?»: las columnas con dos puntos
+  se cambian por barras desde NPS 0 (verde a la derecha, rojo a la izquierda) con una frase que dice la diferencia.
+  Mismo cambio en `graficos.js/.css` de Soporte-FM y Factura.
+
 ## 2026-11-17 · v1
 
 - ETL desde Oracle `INVITADO_15`: `TBL_DIGITAL_APP_WEB`, `TBL_DIGITAL_WHATSAPP_BOT`, `TBL_DIGITAL_ECOMMERCE` y

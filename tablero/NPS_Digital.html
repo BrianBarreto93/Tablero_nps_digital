@@ -443,11 +443,6 @@ dl.defs dt{font-weight:800}dl.defs dd{margin:0;color:var(--ink-2)}
 .g-tira span.g-centro{border-radius:2px}
 /* Dolores: los puntos se centran con márgenes (la animación «pop» usa transform) */
 .pz .pt{transform:none;margin:-6.5px 0 0 -6.5px}
-/* Resolución: brecha más alta para que acompañe a la composición */
-.res-br .g-br-col{grid-template-rows:370px auto}
-.res-br .g-br-pista,.res-br .g-br-guias{height:370px}
-.res-br .g-brecha{flex:1;align-content:space-between}
-@media (max-width:1300px){.res-br .g-br-col{grid-template-rows:280px auto}.res-br .g-br-pista,.res-br .g-br-guias{height:280px}}
 /* Composición: donas arriba, waffles abajo, tres por fila */
 .comp-b+.comp-b{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .comp-b h3{margin:0 0 2px;font:800 11px/1.2 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
@@ -468,7 +463,6 @@ dl.defs dt{font-weight:800}dl.defs dd{margin:0;color:var(--ink-2)}
 .cajon .g-reloj figcaption span{flex-wrap:wrap;gap:0 5px}
 @media (max-width:760px){
   .cajon .g-relojes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .res-br .g-br-col{grid-template-rows:220px auto}.res-br .g-br-pista,.res-br .g-br-guias{height:220px}
   /* Pestaña de comentarios de la nube: encima de la barra de secciones fija de abajo, no detrás */
   .nb .nb-pop{bottom:calc(76px + env(safe-area-inset-bottom));max-height:min(72vh,calc(100vh - 190px))}
 }
