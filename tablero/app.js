@@ -606,10 +606,10 @@ function vApp(p) {
   p.innerHTML = `${avisoEst(e)}
     <div class="g g2"><section class="panel"><header><h2>Super App frente a la web</h2><p class="sub">Mi Claro · ${etqMeses(st.meses)}. La brecha es web − app.</p></header>${comparar(cs, ['nps', 'nsu', 'ces'])}
         <div style="margin-top:14px">${wafNps(cs)}</div></section>
-      <section class="panel res-br"><header><h2>Facilidad y recomendación</h2><p class="sub">NPS de quien encontró fácil el trámite (Q8) frente a quien lo encontró difícil.</p></header>${brechaCes(cs)}</section></div>
+      <div class="pila"><section class="panel"><header><h2>Facilidad y recomendación</h2><p class="sub">NPS de quien encontró fácil el trámite (Q8) frente a quien lo encontró difícil.</p></header>${brechaCes(cs)}</section>
+      <section class="panel"><header><h2>Qué falló</h2><p class="sub">Temas de Qualtrics en «¿Qué te impidió tener una buena experiencia?» (Q6) y «¿Qué fue difícil?» (Q9) · % sobre ${f0(a.com_temas)} encuestas que escribieron algo.</p></header>${G.paletas(temasDe(idx), a.com_temas)}</section></div></div>
     ${ranking('app-mod', ['nps', 'ces', 'nsu'], [['modulo', 'Módulo'], ['segmento', 'Segmento'], ['canal', 'Canal']], {est: e, tope: 12, sub: 'Módulo = trámite desde el que se lanzó la encuesta (pagar factura, detalle del plan…). Registro no tiene segmento.'})}
-    <div class="g g2"><section class="panel"><header><h2>¿Qué tan fácil fue el trámite?</h2><p class="sub">Q8 · centrado en «Ni fácil ni difícil».</p></header>${divergente([...cs, ...segs.filter(s => s.nombre !== 'Sin dato')])}</section>
-      <section class="panel" style="align-self:start"><header><h2>Qué falló</h2><p class="sub">Temas de Qualtrics en «¿Qué te impidió tener una buena experiencia?» (Q6) y «¿Qué fue difícil?» (Q9) · % sobre ${f0(a.com_temas)} encuestas que escribieron algo.</p></header>${G.paletas(temasDe(idx), a.com_temas)}</section></div>
+    <section class="panel"><header><h2>¿Qué tan fácil fue el trámite?</h2><p class="sub">Q8 · centrado en «Ni fácil ni difícil».</p></header>${divergente([...cs, ...segs.filter(s => s.nombre !== 'Sin dato')])}</section>
     ${carrusel('app', ['det', 'dif', 'pro'], e)}`;
 }
 function vWa(p) {
@@ -618,13 +618,13 @@ function vWa(p) {
   const segs = porDim(idx, 'segmento').filter(s => s.a.n && s.nombre !== 'No aplica').map(s => ({nombre: s.nombre, a: s.a}));
   const gr = [{nombre: 'WhatsApp', a}, ...segs];
   p.innerHTML = `${avisoEst(e)}
-    <div class="g g2"><section class="panel res-br" style="align-self:start"><header><h2>¿Logró hacer la consulta?</h2><p class="sub">Q10 · NPS de quien lo logró frente a quien no, por segmento.</p></header>${brechaFcr(gr)}</section>
+    <div class="g g2"><div class="pila"><section class="panel"><header><h2>¿Logró hacer la consulta?</h2><p class="sub">Q10 · NPS de quien lo logró frente a quien no, por segmento.</p></header>${brechaFcr(gr)}</section>
+      <section class="panel"><header><h2>Facilidad y recomendación</h2><p class="sub">NPS de quien encontró fácil recibir solución frente a quien lo encontró difícil.</p></header>${brechaCes(gr)}</section></div>
       <section class="panel comp"><header><h2>Composición</h2><p class="sub">Arriba, si logró la consulta. Abajo, cómo recomiendan: cada cuadrito es 1 % de las encuestas.</p></header>
         <div class="comp-b"><h3>¿Resolvió?</h3>${donasFcr(gr)}</div><div class="comp-b"><h3>NPS</h3>${wafNps(gr)}</div></section></div>
     <div class="g g2">${ranking('wa-seg', ['nps', 'nsu', 'ces', 'fcr'], [['segmento', 'Segmento']], {est: e})}
-      <section class="panel"><header><h2>¿Qué tan fácil fue recibir una solución?</h2><p class="sub">Q8 · centrado en «Ni fácil ni difícil».</p></header>${divergente(gr)}</section></div>
-    <div class="g g2"><section class="panel res-br"><header><h2>Facilidad y recomendación</h2><p class="sub">NPS de quien encontró fácil recibir solución frente a quien lo encontró difícil.</p></header>${brechaCes(gr)}</section>
-      <section class="panel" style="align-self:start"><header><h2>Qué falló</h2><p class="sub">Temas de Qualtrics en la experiencia no satisfactoria (Q6), lo difícil (Q9) y por qué no logró la consulta (Q11) · % sobre ${f0(a.com_temas)} encuestas con comentario.</p></header>${G.paletas(temasDe(idx), a.com_temas)}</section></div>
+      <section class="panel"><header><h2>Qué falló</h2><p class="sub">Temas de Qualtrics en la experiencia no satisfactoria (Q6), lo difícil (Q9) y por qué no logró la consulta (Q11) · % sobre ${f0(a.com_temas)} encuestas con comentario.</p></header>${G.paletas(temasDe(idx), a.com_temas)}</section></div>
+    <section class="panel"><header><h2>¿Qué tan fácil fue recibir una solución?</h2><p class="sub">Q8 · centrado en «Ni fácil ni difícil».</p></header>${divergente(gr)}</section>
     ${carrusel('wa', ['nores', 'det', 'pro'], e)}`;
 }
 function vBot(p) {
@@ -634,10 +634,10 @@ function vBot(p) {
   const bm = men.reduce((s, x) => s + x.c, 0), bp = mas.reduce((s, x) => s + x.c, 0), nBm = npsDe(a.n_bmen, a.prom_bmen, a.det_bmen);
   p.innerHTML = `${avisoEst(e)}
     <section class="panel"><header><h2>Claro Bot en cifras</h2><p class="sub">Canal de autoatención en la web. NPS = recomendación del canal (Q9); NSU = satisfacción 7 a 10 (Q2); FCR = «¿resolvió tu requerimiento?» (Q8).</p></header>${comparar([{nombre: 'NPS Digital (total)', a: A({estudio: null})}, {nombre: 'Claro Bot', a, punto: CE[N_BOT]}], ['nps', 'nsu', 'fcr'])}</section>
-    <div class="g g2"><section class="panel res-br"><header><h2>¿Resolvió el requerimiento?</h2><p class="sub">Q8 · NPS de quien dice que sí frente a quien dice que no.</p></header>${brechaFcr(gr)}</section>
-      <section class="panel comp"><header><h2>Composición</h2></header><div class="comp-b"><h3>¿Resolvió?</h3>${donasFcr(gr)}</div><div class="comp-b"><h3>NPS</h3>${wafNps(gr)}</div></section></div>
-    <div class="g g2"><section class="panel" style="align-self:start"><header><h2>Lo que menos gustó</h2><p class="sub">Q3 · % sobre ${f0(bm)} respuestas${nBm != null ? ` (su NPS: ${f1(nBm)})` : ''}.</p></header>${G.paletas(men, bm)}</section>
-      <section class="panel" style="align-self:start"><header><h2>Lo que más gustó</h2><p class="sub">Q7 · % sobre ${f0(bp)} respuestas.</p></header>${G.paletas(mas, bp, {color: () => 'var(--t7)'})}</section></div>
+    <div class="g g2"><section class="panel"><header><h2>¿Resolvió el requerimiento?</h2><p class="sub">Q8 · NPS de quien dice que sí frente a quien dice que no.</p></header>${brechaFcr(gr)}</section>
+      <section class="panel comp"><header><h2>Composición</h2></header><div class="comp-lado"><div class="comp-b"><h3>¿Resolvió?</h3>${donasFcr(gr)}</div><div class="comp-b"><h3>NPS</h3>${wafNps(gr)}</div></div></section></div>
+    <div class="g g2"><section class="panel"><header><h2>Lo que menos gustó</h2><p class="sub">Q3 · % sobre ${f0(bm)} respuestas${nBm != null ? ` (su NPS: ${f1(nBm)})` : ''}.</p></header>${G.paletas(men, bm)}</section>
+      <section class="panel"><header><h2>Lo que más gustó</h2><p class="sub">Q7 · % sobre ${f0(bp)} respuestas.</p></header>${G.paletas(mas, bp, {color: () => 'var(--t7)'})}</section></div>
     ${carrusel('bot', ['det', 'nores', 'pro'], e)}`;
 }
 function vEcom(p) {

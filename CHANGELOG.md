@@ -5,6 +5,7 @@
 - «Facilidad y recomendación», «¿Logró hacer la consulta?» y «¿Resolvió el requerimiento?»: las columnas con dos puntos
   se cambian por barras desde NPS 0 (verde a la derecha, rojo a la izquierda) con una frase que dice la diferencia.
   Mismo cambio en `graficos.js/.css` de Soporte-FM y Factura.
+- Mi Claro, WhatsApp y Claro Bot reacomodados en columnas apiladas para no dejar paneles con espacio vacío.
 
 ## 2026-11-17 · v1
 

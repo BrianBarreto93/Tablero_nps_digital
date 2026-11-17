@@ -97,7 +97,7 @@
 
 /* Brecha (NPS de la buena condición frente a la mala, barras desde 0) */
 .g-brecha{display:grid;gap:14px}
-.g-br-gs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px 28px}
+.g-br-gs{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px 28px}
 .g-br-g{display:grid;gap:6px;align-content:start}
 .g-br-tit{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .g-br-tit b{font:800 13.5px var(--f-ui)}.g-br-tit small{color:var(--ink-3);font-size:11px}

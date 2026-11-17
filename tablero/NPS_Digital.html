@@ -446,6 +446,10 @@ dl.defs dt{font-weight:800}dl.defs dd{margin:0;color:var(--ink-2)}
 /* Composición: donas arriba, waffles abajo, tres por fila */
 .comp-b+.comp-b{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .comp-b h3{margin:0 0 2px;font:800 11px/1.2 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+/* Columna con paneles apilados: el último se estira para que las dos columnas terminen parejas */
+.pila{display:flex;flex-direction:column;gap:14px;min-width:0}.pila>.panel:last-child{flex:1}
+/* Composición de un solo grupo: dona y cuadritos lado a lado */
+.comp-lado{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.comp-lado .comp-b+.comp-b{margin-top:0;padding-top:0;border-top:0}
 .comp .g-donas,.comp .g-waffles{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
 .comp .g-dona-svg{max-width:122px}
 .comp .g-dona-c b{font-size:24px}
