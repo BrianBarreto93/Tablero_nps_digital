@@ -330,39 +330,10 @@ function dibujarLineas(raiz) {
     const tabla = raiz.querySelector(`[data-tabla="${el.id}"]`);
     if (!xs.length) { el.innerHTML = '<p class="vacio">Sin datos con estos filtros</p>'; return; }
     const etq = x => S.flatMap(s => s.pts).find(p => p.x === x).et;
-    const L = 38, R = 64, T = 14, B = 24, vals = S.flatMap(s => s.pts.map(p => p.r.v));
-    let lo = Math.min(...vals), hi = Math.max(...vals); const pad = Math.max(4, (hi - lo) * .15);
-    lo = Math.max(IND[k].min, Math.floor((lo - pad) / 10) * 10); hi = Math.min(IND[k].max, Math.ceil((hi + pad) / 10) * 10);
-    const X = i => xs.length === 1 ? (L + W - R) / 2 : L + (W - L - R) * i / (xs.length - 1), Y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
-    const paso = hi - lo > 60 ? 20 : 10, cada = Math.max(1, Math.ceil(xs.length / Math.max(2, Math.floor((W - L - R) / 52))));
-    const id = 'gl-' + el.id, base = H - B, quieto = document.documentElement.hasAttribute('data-sin-anim');
-    let s = `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true" data-guia${quieto ? ' class="quieto"' : ''}><defs>${G.gradY(id + '-y', lo, hi, IND[k].min, IND[k].max)}${S.map((sr, i) => G.gradArea(`${id}-a${i}`, CE[sr.e], sr.total ? .06 : undefined)).join('')}</defs>`;
-    if (modo === 'mes') st.meses.filter(m => xs.includes(m)).forEach(m => { s += `<rect x="${X(xs.indexOf(m)) - 16}" y="${T - 6}" width="32" height="${H - T - B + 12}" rx="10" fill="var(--panel-2)"/>`; });
-    for (let v = Math.ceil(lo / paso) * paso; v <= hi; v += paso) s += `<line class="grid" x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L - 10}" y="${Y(v) + 4}" text-anchor="end">${f0(v)}</text>`;
-    s += `<rect class="g-rampa-y" x="${L - 5}" y="${Y(hi)}" width="3.5" height="${Y(lo) - Y(hi)}" rx="1.75" fill="url(#${id}-y)"/>`;
-    if (lo < 0 && hi > 0) s += `<line class="eje" x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}"/>`;
-    xs.forEach((x, i) => { if (i % cada === 0 || i === xs.length - 1) s += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle"${modo === 'mes' && st.meses.includes(x) ? ' style="fill:var(--ink);font-weight:800"' : ''}>${esc(etq(x))}</text>`; });
-    s += `<line class="g-guia-l" x1="0" x2="0" y1="${T - 6}" y2="${base}"/>`;
-    // Etiquetas al final de cada línea, separadas para que no se monten
-    const fin = S.map((sr, si) => { const p = sr.pts[sr.pts.length - 1]; return {si, y: Y(p.r.v), x: X(xs.indexOf(p.x)), p}; }).sort((a, b) => a.y - b.y);
-    for (let i = 1; i < fin.length; i++) if (fin[i].y - fin[i - 1].y < 13) fin[i].y = fin[i - 1].y + 13;
-    S.forEach(({e, pts, total}, si) => {
-      const c = CE[e], pos = pts.map(p => [X(xs.indexOf(p.x)), Y(p.r.v), p]);
-      // La línea se corta donde el estudio no tiene datos (p. ej., Claro Bot sin meses en Oracle): no se inventa el tramo
-      const segs = []; pos.forEach((q, j) => { if (!j || xs.indexOf(q[2].x) - xs.indexOf(pos[j - 1][2].x) > 1) segs.push([]); segs[segs.length - 1].push(q); });
-      const tramo = sg => sg.map((q, j) => (j ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' '), d = segs.map(tramo).join(' ');
-      if (!total) segs.filter(sg => sg.length > 1).forEach(sg => { s += `<path d="${tramo(sg)} L${sg[sg.length - 1][0].toFixed(1)} ${base} L${sg[0][0].toFixed(1)} ${base} Z" class="l-ap" style="fill:url(#${id}-a${si});animation-delay:${.55 + si * .1}s"/>`; });
-      s += `<path d="${d}" pathLength="1" fill="none" stroke="${c}" stroke-width="${total ? 2.8 : 2}"${total ? ' stroke-dasharray="0"' : ''} stroke-linejoin="round" stroke-linecap="round" data-an="traza" data-i="${si * 2}"/>`;
-      s += pos.map(([x, y, p], j) => `<circle class="g-pt l-pop" data-x="${p.x}" cx="${x}" cy="${y}" r="${total ? 4.2 : 3.6}" fill="${p.r.n < NMIN ? 'var(--panel)' : c}" stroke="${p.r.n < NMIN ? c : 'var(--panel)'}" stroke-width="2" style="animation-delay:${(.15 + si * .1 + 1.1 * j / Math.max(1, pos.length - 1)).toFixed(2)}s"/>`).join('');
-    });
-    fin.forEach(f => { s += `<text class="val l-ap" x="${f.x + 8}" y="${f.y + 4}" style="animation-delay:${1.3 + f.si * .1}s">${fmt(k, f.p.r)}</text>`; });
-    xs.forEach((x, i) => {
-      const x0 = i ? (X(i - 1) + X(i)) / 2 : L, x1 = i < xs.length - 1 ? (X(i) + X(i + 1)) / 2 : W - R;
-      const t = S.map(({e, pts}) => { const p = pts.find(p => p.x === x); return p ? `<i style="background:${CE[e]}"></i>${CORTO[e] || e}: <b>${fmt(k, p.r)}</b> · n ${f0(p.r.n)}${p.r.n < NMIN ? ' (muestra baja)' : ''}` : ''; }).filter(Boolean).join('<br>');
-      s += `<rect class="hit" data-x="${x}" data-cx="${X(i)}" x="${x0}" y="${T}" width="${x1 - x0}" height="${H - T - B}" ${tipAttr(`<div class="t">${modo === 'mes' ? '' : 'Semana del '}${esc(etq(x))}</div>${t}`)}/>`;
-    });
-    el.innerHTML = s + '</svg>';
-    G.guia(el);
+    // Curvas con movimiento de graficos.js (G.lineas); la serie total (NPS Digital) va más gruesa, sin área y con cifra en tinta
+    G.lineas(el, {id: el.id, xs, etq, marcas: modo === 'mes' ? st.meses : [], min: IND[k].min, max: IND[k].max, nmin: NMIN,
+      fmt: v => fmt(k, {v}), series: S.map(sr => ({nombre: sr.e, color: CE[sr.e], total: !!sr.total, tinta: sr.total ? 'var(--panel)' : null, pts: sr.pts.map(p => ({x: p.x, v: p.r.v, n: p.r.n}))})),
+      tip: x => `<div class="t">${modo === 'mes' ? '' : 'Semana del '}${esc(etq(x))}</div>` + S.map(({e, pts}) => { const p = pts.find(p => p.x === x); return p ? `<i style="background:${CE[e]}"></i>${CORTO[e] || e}: <b>${fmt(k, p.r)}</b> · n ${f0(p.r.n)}${p.r.n < NMIN ? ' (muestra baja)' : ''}` : ''; }).filter(Boolean).join('<br>')});
     if (tabla) tabla.innerHTML = `<table class="rk"><thead><tr><th>${modo === 'mes' ? 'Mes' : 'Semana'}</th>${S.map(s => `<th class="num">${CORTO[s.e] || s.e}</th><th class="num">n</th>`).join('')}</tr></thead><tbody>${xs.map(x => `<tr><td>${esc(etq(x))}</td>${S.map(s => { const p = s.pts.find(p => p.x === x); return `<td class="num">${p ? fmt(k, p.r) : '—'}</td><td class="num">${p ? f0(p.r.n) : '—'}</td>`; }).join('')}</tr>`).join('')}</tbody></table>`;
   });
 }

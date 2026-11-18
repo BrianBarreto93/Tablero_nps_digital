@@ -1,5 +1,15 @@
 # Cambios
 
+## 2026-11-18 · v1.3
+
+- Gráficos de líneas nuevos (`GRAF.lineas` en `graficos.js`, la misma copia en Factura, Soporte-FM y Digital): curva suave
+  que no inventa picos entre meses, área en degradado y resplandor del color de la serie. Al entrar en pantalla la línea se
+  traza con un cometa, cada punto aparece cuando la línea llega a él y la cifra final, en píldora, cuenta hasta su valor; el
+  último punto late unos segundos. Mes elegido en píldora oscura. Redibujar con los mismos datos (tamaño, tema) no repite la
+  animación; al imprimir o con «reducir movimiento» se ve quieto.
+- Sparks de los KPI con curva suave, más color en el área y un punto final que late.
+  La serie total (NPS Digital) va más gruesa y sin área.
+
 ## 2026-11-17 · v1.2
 
 - Histórico mayo–noviembre 2026 desde Oracle (496.157 encuestas). Claro Bot sin julio–octubre en `TBL_DIGITAL_TOUCHPOINT`.
