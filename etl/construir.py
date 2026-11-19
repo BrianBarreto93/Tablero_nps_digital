@@ -7,6 +7,7 @@ de nivel «error» falla, no se escribe nada.
 
 Uso:
     .venv/bin/python -m etl.construir                   # todos los periodos que haya en Oracle
+    (en Windows: .venv\Scripts\python.exe, o actualizar_tablero.bat que corre construir → pytest → publicar)
     .venv/bin/python -m etl.construir --periodo 202611  # uno solo (se puede repetir)
     .venv/bin/python -m etl.construir --solo-ensamblar  # rehace datos.js con lo ya guardado (sin Oracle)
 """
@@ -61,7 +62,7 @@ def procesar(periodos_pedidos=None):
     for p in periodos:
         prev = DIR_PERIODOS / f"{_anterior(p)}.json"
         # el mes anterior puede venir en esta misma corrida (aún sin escribir a disco)
-        n_ant = salidas[_anterior(p)]["n_estudio"] if _anterior(p) in salidas else json.loads(prev.read_text())["n_estudio"] if prev.exists() else {}
+        n_ant = salidas[_anterior(p)]["n_estudio"] if _anterior(p) in salidas else json.loads(prev.read_text(encoding="utf-8"))["n_estudio"] if prev.exists() else {}
         chk, subs, vb, bf, escaneo, conteo, n_est = [], [], [], [], [], {}, {}
         for k in ORDEN_ESTUDIOS:
             sel = ds[k].periodo == p
@@ -79,7 +80,7 @@ def procesar(periodos_pedidos=None):
         chk.insert(1, calidad.periodo_parcial(p, todo.fecha))
         actual = DIR_PERIODOS / f"{p}.json"
         if actual.exists():
-            n_viejo = json.loads(actual.read_text())["n"]
+            n_viejo = json.loads(actual.read_text(encoding="utf-8"))["n"]
             if n_viejo != len(todo):
                 chk.append(calidad._chk("reemplazo", "aviso", "El corte reemplaza uno ya guardado",
                                         f"Antes {calidad.num(n_viejo)} encuestas, ahora {calidad.num(len(todo))}", len(todo)))

@@ -1,5 +1,14 @@
 # Cambios
 
+## 2026-11-19 · v1.5
+
+- Corre en Windows (`D:\TABLEROS\4. NPS_DIGITAL`) enganchado a la ETL de Qualtrics: `D:\Proyectos\4. Estudios Digital\run_etl.bat`
+  llama a `actualizar_tablero.bat` (construir → pytest → publicar) después de cargar Oracle, igual que Soporte-FM.
+- `etl.publicar` toma las credenciales SFTP del `.env` del proyecto (y, si no están, del de claro_vista_360 en el
+  servidor); avisa si faltan. `.env.example` con el bloque SFTP.
+- Lectura de los JSON de `data/periodos/` en UTF-8 explícito (en Windows el predeterminado es cp1252).
+- `logs/` fuera de git.
+
 ## 2026-11-18 · v1.4
 
 - Filtros de la barra de arriba con la selección resaltada, como los filtros de Voces: cada grupo es una cápsula con su

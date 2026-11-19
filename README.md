@@ -7,7 +7,24 @@ masivas y de Factura, pago y cobro.
 - Publicado: https://servidor.lan.qwertylab.dev/umm/DIGITAL/NPS_Digital.html
 - Abrir local: `tablero/NPS_Digital.html` (doble clic, sin servidor ni internet; la descarga de la base sí necesita servidor).
 
-## Corrida mensual
+## Actualización automática (Windows, `D:\TABLEROS\4. NPS_DIGITAL`)
+
+La ETL que descarga de Qualtrics (`D:\Proyectos\4. Estudios Digital\run_etl.bat`, tarea programada lun, mié y vie
+7:00) carga las cuatro tablas `TBL_DIGITAL_*` y, como **Paso 5**, llama a `actualizar_tablero.bat` de este proyecto:
+
+1. `etl.construir`: Oracle → `data/periodos/` → `tablero/datos.js`
+2. `pytest -q`
+3. `etl.publicar`: SFTP LAN + verificación HTTP
+
+Se llama también si algún estudio falló en Qualtrics (código 1): ese estudio no tocó Oracle y los demás sí quedaron
+cargados. Si el tablero falla, `run_etl.bat` termina con código 3 y no se publica nada. Detalle en
+`logs\tablero_AAAAMMDD_HHMM.log`. `actualizar_tablero.bat` también sirve solo, con doble clic.
+
+Requisitos: `.venv` (`python -m venv .venv && .venv\Scripts\pip install -r requirements.txt`) y `.env` con Oracle
+(las mismas del `.env` de la ETL de Qualtrics; allá `ORACLE_SERVICE_NAME` aquí es `ORACLE_DBNAME`) y SFTP
+(las de `2. SOP_FM`). Ver `.env.example`.
+
+## Corrida manual (servidor)
 
 ```bash
 cd /opt/apps/claro_tablero_focos/claro_tablero_digital
