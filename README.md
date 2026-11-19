@@ -9,8 +9,8 @@ masivas y de Factura, pago y cobro.
 
 ## Actualización automática (Windows, `D:\TABLEROS\4. NPS_DIGITAL`)
 
-La ETL que descarga de Qualtrics (`D:\Proyectos\4. Estudios Digital\run_etl.bat`, tarea programada lun, mié y vie
-7:00) carga las cuatro tablas `TBL_DIGITAL_*` y, como **Paso 5**, llama a `actualizar_tablero.bat` de este proyecto:
+La ETL que descarga de Qualtrics (`D:\Proyectos\4. Estudios Digital\run_etl.bat`, tarea programada `Act_tab_NPS_digital`,
+lun, mar y vie 9:00) carga las cuatro tablas `TBL_DIGITAL_*` y, como **Paso 5**, llama a `actualizar_tablero.bat` de este proyecto:
 
 1. `etl.construir`: Oracle → `data/periodos/` → `tablero/datos.js`
 2. `pytest -q`
