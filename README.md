@@ -7,6 +7,39 @@ masivas y de Factura, pago y cobro.
 - Publicado: https://servidor.lan.qwertylab.dev/umm/DIGITAL/NPS_Digital.html
 - Abrir local: `tablero/NPS_Digital.html` (doble clic, sin servidor ni internet; la descarga de la base sí necesita servidor).
 
+## Vistas
+
+Capturas de octubre 2026 (último mes cerrado; el tablero abre en el último mes disponible). Modo claro por defecto, con botón para oscuro.
+Se quitó de las capturas la sección «Lo que dicen los clientes» (comentarios literales); la pestaña **Voces** tampoco se muestra.
+
+**Resumen.** Los cuatro indicadores del NPS Digital (NPS, NSU, CES, FCR) con tendencia por estudio, y los hallazgos del mes.
+
+![Resumen](docs/img/resumen.png)
+
+**Mi Claro** (Super App frente a web, facilidad, qué falló, NPS por módulo), **WhatsApp**, **Claro Bot** y **E-commerce**:
+
+![Mi Claro](docs/img/app.png)
+
+![WhatsApp](docs/img/wa.png)
+
+![Claro Bot](docs/img/bot.png)
+
+![E-commerce](docs/img/ecom.png)
+
+**Calidad de datos.** Chequeos del contrato de cada mes; los errores bloquean la corrida y los avisos se muestran aquí.
+
+![Calidad de datos](docs/img/calidad.png)
+
+**Descarga de la base** (Excel, CSV o Parquet, con los filtros activos):
+
+![Descargar base](docs/img/descarga.png)
+
+**Modo oscuro** y **celular** (menú abajo, KPI en una columna):
+
+![Modo oscuro](docs/img/resumen_oscuro.png)
+
+<img src="docs/img/movil.png" alt="Vista en celular" width="280">
+
 ## Corrida mensual
 
 ```bash
